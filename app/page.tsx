@@ -53,7 +53,15 @@ export default function Home() {
   };
 
   const deleteTodo = (id: number) => {
-    // setTodos(todos.filter(todo => todo.id !== id));
+    fetch(`/api/todos/${id}`, {
+      method: 'DELETE',
+    })
+      .then(res => res.json())
+      .then(data => {
+        if (!data.error) {
+          updateTodos();
+        }
+      })
   };
 
   useEffect(() => {
