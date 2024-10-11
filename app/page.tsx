@@ -16,6 +16,7 @@ export default function Home() {
   const [colorMode, setColorMode] = useState('🌚');
   const [todos, setTodos] = useState<Todo[]>([]);
   const [newTodo, setNewTodo] = useState('');
+  const [loading, setLoading] = useState(true);
 
   const addTodo = () => {
     if (newTodo.trim() !== '') {
@@ -25,13 +26,13 @@ export default function Home() {
   };
 
   const toggleTodo = (id: number) => {
-    setTodos(todos.map(todo =>
-        todo.id === id ? { ...todo, completed: !todo.completed } : todo
-    ));
+    // setTodos(todos.map(todo =>
+    //     todo.id === id ? { ...todo, completed: !todo.completed } : todo
+    // ));
   };
 
   const deleteTodo = (id: number) => {
-    setTodos(todos.filter(todo => todo.id !== id));
+    // setTodos(todos.filter(todo => todo.id !== id));
   };
 
   useEffect(() => {
@@ -41,6 +42,23 @@ export default function Home() {
       document.body.classList.remove('dark');
     }
   }, [colorMode]);
+
+  const updateTodos = () => {
+    setLoading(true);
+    fetch("/api/todos/")
+        .then(res => res.json())
+        .then(data => {
+          if (!data.error) {
+            setTodos(data);
+            setNewTodo('');
+          }
+          setLoading(false);
+        });
+  }
+
+  useEffect(() => {
+    updateTodos();
+  }, []);
 
   return (
       <div className="container mx-auto p-4 max-w-md relative">
@@ -60,6 +78,8 @@ export default function Home() {
             </CardTitle>
           </CardHeader>
           <CardContent>
+            { loading && <div className="text-center">Carregando...</div> }
+            { !loading && <>
             <div className="flex space-x-2 mb-4">
               <Input
                   type="text"
@@ -90,6 +110,7 @@ export default function Home() {
                   </li>
               ))}
             </ul>
+            </>}
           </CardContent>
         </Card>
       </div>
