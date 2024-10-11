@@ -7,8 +7,8 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 
 interface Todo {
   id: number;
-  title: string;
-  complete: boolean;
+  text: string;
+  completed: boolean;
 }
 
 export default function Home() {
