@@ -37,9 +37,19 @@ export default function Home() {
   };
 
   const toggleTodo = (id: number) => {
-    // setTodos(todos.map(todo =>
-    //     todo.id === id ? { ...todo, completed: !todo.completed } : todo
-    // ));
+    const todo = todos.find((element) => element.id === id);
+    fetch(`/api/todos/${id}`, {
+      method: 'PUT',
+      body: JSON.stringify({
+        completed: !todo?.completed,
+      })
+    })
+      .then(res => res.json())
+      .then(data => {
+        if (!data.error) {
+          updateTodos();
+        }
+      })
   };
 
   const deleteTodo = (id: number) => {
