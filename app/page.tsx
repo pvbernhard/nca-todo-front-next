@@ -14,6 +14,15 @@ interface Todo {
 
 export default function Home() {
   const [colorMode, setColorMode] = useState('🌚');
+  const [todos, setTodos] = useState<Todo[]>([]);
+  const [newTodo, setNewTodo] = useState('');
+
+  const addTodo = () => {
+    if (newTodo.trim() !== '') {
+      setTodos([...todos, { id: Date.now(), text: newTodo, completed: false }]);
+      setNewTodo('');
+    }
+  };
 
   useEffect(() => {
     if (colorMode === '🌝') {
@@ -44,25 +53,30 @@ export default function Home() {
             <div className="flex space-x-2 mb-4">
               <Input
                   type="text"
-                  placeholder="ex.: aprender next.js"
+                  value={newTodo}
+                  onChange={(e) => setNewTodo(e.target.value)}
+                  placeholder={todos.length === 0 ? "ex.: aprender next.js" : "ex.: outra tarefa"}
+                  onKeyDown={(e) => e.key === 'Enter' && addTodo()}
               />
-              <Button>Adicionar</Button>
+              <Button onClick={addTodo}>Adicionar</Button>
             </div>
             <ul className="space-y-2">
-              <li key={1} className="flex items-center space-x-2">
-                <Checkbox
-                    id="todo-1"
-                />
-                <label
-                    htmlFor="todo-1"
-                    className="flex-grow"
-                >
-                  Texto
-                </label>
-                <Button variant="destructive" size="sm">
-                  Deletar
-                </Button>
-              </li>
+              {todos.map(todo => (
+                  <li key={todo.id} className="flex items-center space-x-2">
+                    <Checkbox
+                        id={`todo-${todo.id}`}
+                    />
+                    <label
+                        htmlFor={`todo-${todo.id}`}
+                        className={`flex-grow ${todo.completed ? 'line-through text-gray-500' : ''}`}
+                    >
+                      {todo.text}
+                    </label>
+                    <Button variant="destructive" size="sm">
+                      Deletar
+                    </Button>
+                  </li>
+              ))}
             </ul>
           </CardContent>
         </Card>
