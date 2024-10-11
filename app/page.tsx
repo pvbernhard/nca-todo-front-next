@@ -24,6 +24,12 @@ export default function Home() {
     }
   };
 
+  const toggleTodo = (id: number) => {
+    setTodos(todos.map(todo =>
+        todo.id === id ? { ...todo, completed: !todo.completed } : todo
+    ));
+  };
+
   useEffect(() => {
     if (colorMode === '🌝') {
       document.body.classList.add('dark');
@@ -64,6 +70,8 @@ export default function Home() {
               {todos.map(todo => (
                   <li key={todo.id} className="flex items-center space-x-2">
                     <Checkbox
+                        checked={todo.completed}
+                        onCheckedChange={() => toggleTodo(todo.id)}
                         id={`todo-${todo.id}`}
                     />
                     <label
