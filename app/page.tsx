@@ -30,6 +30,10 @@ export default function Home() {
     ));
   };
 
+  const deleteTodo = (id: number) => {
+    setTodos(todos.filter(todo => todo.id !== id));
+  };
+
   useEffect(() => {
     if (colorMode === '🌝') {
       document.body.classList.add('dark');
@@ -80,7 +84,7 @@ export default function Home() {
                     >
                       {todo.text}
                     </label>
-                    <Button variant="destructive" size="sm">
+                    <Button variant="destructive" size="sm" onClick={() => deleteTodo(todo.id)}>
                       Deletar
                     </Button>
                   </li>
