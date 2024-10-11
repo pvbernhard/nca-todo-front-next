@@ -20,8 +20,19 @@ export default function Home() {
 
   const addTodo = () => {
     if (newTodo.trim() !== '') {
-      setTodos([...todos, { id: Date.now(), text: newTodo, completed: false }]);
-      setNewTodo('');
+      fetch('/api/todos/', {
+        method: 'POST',
+        body: JSON.stringify({
+          text: newTodo,
+          completed: false,
+        })
+      })
+        .then(res => res.json())
+        .then(data => {
+          if (!data.error) {
+            updateTodos();
+          }
+        })
     }
   };
 
@@ -44,7 +55,6 @@ export default function Home() {
   }, [colorMode]);
 
   const updateTodos = () => {
-    setLoading(true);
     fetch("/api/todos/")
         .then(res => res.json())
         .then(data => {
@@ -57,6 +67,7 @@ export default function Home() {
   }
 
   useEffect(() => {
+    setLoading(true);
     updateTodos();
   }, []);
 
