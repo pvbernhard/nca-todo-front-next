@@ -1,5 +1,6 @@
 "use client";
 
+import {useEffect, useState} from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Checkbox } from '@/components/ui/checkbox';
@@ -12,10 +13,23 @@ interface Todo {
 }
 
 export default function Home() {
+  const [colorMode, setColorMode] = useState('🌚');
+
+  useEffect(() => {
+    if (colorMode === '🌝') {
+      document.body.classList.add('dark');
+    } else {
+      document.body.classList.remove('dark');
+    }
+  }, [colorMode]);
+
   return (
       <div className="container mx-auto p-4 max-w-md relative">
-        <div className="absolute p-4 right-4 cursor-pointer">
-          🌚
+        <div
+            className="absolute p-4 right-4 cursor-pointer"
+            onClick={() => setColorMode((prevState) => prevState === '🌚' ? '🌝' : '🌚')}
+        >
+          {colorMode}
         </div>
         <Card>
           <CardHeader>
